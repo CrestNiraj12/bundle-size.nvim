@@ -97,6 +97,10 @@ function M.refresh()
   end
 
   if M.opts.enabled == false then
+    if M.cache.result ~= "" then
+      M.cache.result = ""
+      request_redraw()
+    end
     return
   end
 
