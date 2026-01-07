@@ -91,8 +91,10 @@ function M.refresh()
   if raw > (M.opts.max_file_size_kb * 1024) then
     M.cache.raw = raw
     M.cache.gzip = nil
-    M.cache.result = "raw (too big)"
-    request_redraw()
+    if M.cache.result ~= "raw (too big)" then
+      M.cache.result = "raw (too big)"
+      request_redraw()
+    end
     return
   end
 
@@ -106,6 +108,7 @@ function M.refresh()
 
   compute.gzip_size(text, function(gz)
     vim.schedule(function()
+      if not vim.api.nvim_buf_is_valid(buf) then return end
       if buf ~= vim.api.nvim_get_current_buf() then return end
       if tick ~= vim.b[buf].changedtick then return end
 
